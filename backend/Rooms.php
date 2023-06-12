@@ -4,7 +4,6 @@ session_start();
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +11,7 @@ session_start();
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hotel Reservation System </title>
+    <title>Rooms</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
 </head>
@@ -37,15 +36,15 @@ session_start();
                 <div class="text-end">
                     <?php if (isset($_SESSION['user_id'])) {
                     ?>
-                        <a class="btn btn-outline-light me-2" href="../backend/logout.php">Logout</a>
+                    <a class="btn btn-outline-light me-2" href="../backend/logout.php">Logout</a>
 
 
                     <?php } else {
                     ?>
-                        <button type="button" class="btn btn-outline-light me-2">
-                            <a href="../backend/login.php">Login</a>
-                        </button>
-                        <button type="button" class="btn btn-warning"> <a href="../backend/signup.php">Sign-up</a></button>
+                    <button type="button" class="btn btn-outline-light me-2">
+                        <a href="../backend/login.php">Login</a>
+                    </button>
+                    <button type="button" class="btn btn-warning"> <a href="../backend/signup.php">Sign-up</a></button>
 
                     <?php
                     } ?>
@@ -54,35 +53,6 @@ session_start();
         </div>
     </header>
     <!--End of nav bar-->
-
-    <!-- start of slider -->
-    <div class="container">
-        <div class="mx-5">
-            <div id="carouselExampleFade" class="carousel slide carousel-fade px-4">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="assets/img/double-bed.jpg" class="d-block" alt="Single Bed Room" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="assets/img/single-bed.png" class="d-block" alt="Double Bed Room" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="assets/img/royalroom.jpg" class="d-block" alt="Royal Bed Room" />
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- end of slider -->
-
     <!-- start of content -->
 
     <div class="container-body">
@@ -101,7 +71,19 @@ session_start();
                                         The room size or area of Single Rooms are generally
                                         between 37 m² to 45 m².
                                     </p>
-                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                    Status:
+                                    <div class="row align-items-center mt-3">
+                                        <div class="col-6">
+                                            <form action="">
+                                                <input type="number" name="quantity" min="0" max="15" id="" value="0" />
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn btn-outline-success me-2">
+                                                <a href="#">Book</a>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +98,19 @@ session_start();
                                         The room size or area of Double Rooms are generally
                                         between 40 m² to 45 m².
                                     </p>
-                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                    Status:
+                                    <div class="row align-items-center mt-3">
+                                        <div class="col-6">
+                                            <form action="">
+                                                <input type="number" name="quantity" min="0" max="15" id="" value="0" />
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn btn-outline-success me-2">
+                                                <a href="#">Book</a>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +124,19 @@ session_start();
                                         more people. The room size or area of Queen Rooms are
                                         generally between 32 m² to 50 m².
                                     </p>
-                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                    Status:
+                                    <div class="row align-items-center mt-3">
+                                        <div class="col-6">
+                                            <form action="">
+                                                <input type="number" name="quantity" min="0" max="15" id="" value="0" />
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn btn-outline-success me-2">
+                                                <a href="#">Book</a>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -145,7 +151,19 @@ session_start();
                                         more people. The room size or area of King Rooms are
                                         generally between 32 m² to 50 m².
                                     </p>
-                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                    Status:
+                                    <div class="row align-items-center mt-3">
+                                        <div class="col-6">
+                                            <form action="">
+                                                <input type="number" name="quantity" min="0" max="15" id="" value="0" />
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn btn-outline-success me-2">
+                                                <a href="#">Book</a>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +177,19 @@ session_start();
                                         people. The room size or area of Twin Rooms are generally
                                         between 32 m² to 40 m².
                                     </p>
-                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                    Status:
+                                    <div class="row align-items-center mt-3">
+                                        <div class="col-6">
+                                            <form action="">
+                                                <input type="number" name="quantity" min="0" max="15" id="" value="0" />
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn btn-outline-success me-2">
+                                                <a href="#">Book</a>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +203,19 @@ session_start();
                                         The room size or area of Quad Rooms are generally between
                                         70 m² to 85 m².
                                     </p>
-                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                    Status:
+                                    <div class="row align-items-center mt-3">
+                                        <div class="col-6">
+                                            <form action="">
+                                                <input type="number" name="quantity" min="0" max="15" id="" value="0" />
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn btn-outline-success me-2">
+                                                <a href="#">Book</a>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -184,6 +226,8 @@ session_start();
     </div>
 
     <!-- end of content -->
+
+
 
     <!-- start of footer -->
     <div class="container">

@@ -1,5 +1,26 @@
 <?php
-
+include 'db-connect.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $firstname = $_POST['fname'];
+    $lastname = $_POST['lname'];
+    $mobile = $_POST['phone'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $emailquery = "SELECT * FROM dbms_userinfo WHERE email='$email'";
+    $query = mysqli_query($con, $emailquery);
+    $emailcount = mysqli_num_rows($query);
+    if ($emailcount > 0) {
+        echo '<script> alert("Email already exists")</script>';
+    } else {
+        $insertquery = "INSERT INTO dbms_userinfo(firstname, lastname, phoneno, email, password)VALUES('$firstname', '$lastname', '$mobile', '$email', '$password')";
+        $iquery = mysqli_query($con, $insertquery);
+        if ($iquery) {
+            echo '<script>alert("Account create Successfully")</script>';
+        } else {
+            echo '<script>alert("Account Doesnot Create")</script>';
+        }
+    }
+}
 
 
 
@@ -28,16 +49,16 @@
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                    <li><a href="../backend/index.php" class="nav-link px-2 text-secondary">Home</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Contact</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Rooms</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">About</a></li>
                 </ul>
                 <div class="text-end">
                     <button type="button" class="btn btn-outline-light me-2">
-                        Login
+                        <a href="../backend/login.php">Login</a>
                     </button>
-                    <button type="button" class="btn btn-warning">Sign-up</button>
+                    <button type="button" class="btn btn-warning"> <a href="../backend/signup.php">Sign-up</a></button>
                 </div>
             </div>
         </div>
@@ -48,27 +69,27 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-4">
-                <form class="login-hm">
+                <form class="login-hm" method="Post">
                     <h1 class="h3 mb-3 fw-normal">Please Sign-Up</h1>
 
                     <div class="form-floating mb-3">
-                        <input type="name" class="form-control" id="floatingInput" placeholder="Firstname" />
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Firstname" name="fname" required />
                         <label for="floatingInput">Firstname</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="name" class="form-control" id="floatingInput" placeholder="Lastname" />
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Lastname" name="lname" required />
                         <label for="floatingInput">Lastname</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="floatingInput" placeholder="number" />
+                        <input type="text" class="form-control" id="floatingInput" placeholder="number" name="phone" required />
                         <label for="floatingInput">Phone Number</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required />
                         <label for="floatingInput">Email address</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required />
                         <label for="floatingPassword">Password</label>
                     </div>
 
@@ -77,7 +98,7 @@
                             <input type="checkbox" value="remember-me" /> Remember me
                         </label>
                     </div>
-                    <button class="w-100 btn btn-lg btn-primary" type="submit">
+                    <button class="w-100 btn btn-lg btn-primary" type="submit" name="submit">
                         Sign-Up
                     </button>
                 </form>

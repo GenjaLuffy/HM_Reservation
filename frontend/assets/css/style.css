@@ -1,7 +1,11 @@
+a {
+  text-decoration: none;
+  color: inherit;
+}
 .carousel-item img {
   height: 500px;
   width: 100%;
-  object-fit: cover; 
+  object-fit: cover;
   object-position: center bottom;
 }
 
@@ -10,7 +14,7 @@
   margin: 30px;
 }
 
-.card-img-top{
+.card-img-top {
   height: 250px;
   object-fit: cover;
 }
