@@ -1,20 +1,30 @@
 <?php
-
 include 'db-connect.php';
+
 if (isset($_POST['login'])) {
     $email = $_POST['lemail'];
     $password = $_POST['lpassword'];
 
-    $emailsearch = "SELECT * From dbms_userinfo WHERE email='$email'";
+    $emailsearch = "SELECT * FROM dbms_userinfo WHERE email='$email'";
     $query = mysqli_query($con, $emailsearch);
     $email_count = mysqli_num_rows($query);
+
     if ($email_count) {
         $user_data = mysqli_fetch_assoc($query);
         $db_pass = $user_data['password'];
+
         if ($db_pass == $password) {
             session_start();
             $_SESSION['user_id'] = $user_data["ID"];
-            header("Location: index.php");
+
+            if ($user_data['role'] === 'admin') {
+                $_SESSION['role'] = 'admin';
+                header("Location: admin_dashboard.php"); // Redirect to admin dashboard
+            } else {
+                $_SESSION['role'] = 'user';
+                header("Location: index.php"); // Redirect to user dashboard or homepage
+            }
+            exit();
         } else {
             echo '<script>alert("Incorrect password")</script>';
         }
@@ -22,13 +32,8 @@ if (isset($_POST['login'])) {
         echo '<script>alert("Invalid Email")</script>';
     }
 }
-
-
-
-
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,9 +58,9 @@ if (isset($_POST['login'])) {
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                    <li><a href="index.php" class="nav-link px-2 text-secondary">Home</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Contact</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Rooms</a></li>
+                    <li><a href="Rooms.php" class="nav-link px-2 text-white">Rooms</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">About</a></li>
                 </ul>
                 <div class="text-end">
