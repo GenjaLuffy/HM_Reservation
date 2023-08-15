@@ -1,0 +1,243 @@
+<?php
+// Database connection settings
+$server = "localhost";
+$user = "root";
+$password = "";
+$db = "dbms_user_account";
+
+$con = new mysqli($server, $user, $password, $db);
+
+// Check if connection is successful
+if ($con->connect_errno) {
+    echo "Failed to connect to MySQL: " . $con->connect_error;
+    exit();
+}
+
+// Function to fetch room data
+function getRooms()
+{
+    global $con;
+
+    $rooms = array();
+
+    // Perform a query to fetch room data
+    $query = "SELECT * FROM booked_rooms";
+    $result = $con->query($query);
+
+    // Check if query execution was successful
+    if ($result) {
+        // Fetch rows as associative arrays
+        while ($row = $result->fetch_assoc()) {
+            $rooms[] = $row;
+        }
+
+        // Free result set
+        $result->free();
+    }
+
+    return $rooms;
+}
+
+// Call the getRooms() function to fetch room data
+$rooms = getRooms();
+
+// Fetch booked room data from the database
+$query = "SELECT * FROM bookings";
+$result = $con->query($query);
+
+// Check if query execution was successful
+if ($result) {
+    // Fetch rows as associative arrays
+    $bookedRooms = array();
+    while ($row = $result->fetch_assoc()) {
+        $bookedRooms[] = $row;
+    }
+
+    // Free result set
+    $result->free();
+} else {
+    echo "Error executing query: " . $con->error;
+}
+
+// Close the database connection
+$con->close();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+    <!-- start of nav bar -->
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="../backend/index.php" class="nav-link px-2 text-secondary">Home</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Contact</a></li>
+                    <li><a href="../backend/Rooms.php" class="nav-link px-2 text-white">Rooms</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                </ul>
+                <div class="text-end">
+                    <?php
+                    session_start();
+                    if (isset($_SESSION['user_id'])) {
+                        // Check if admin
+                        if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+                            echo '<a class="btn btn-outline-light me-2" href="../backend/admin.php">Dashboard</a>';
+                        }
+                        echo '<a class="btn btn-outline-light me-2" href="../backend/logout.php">Logout</a>';
+                    } else {
+                        echo '<button type="button" class="btn btn-outline-light me-2"><a href="../backend/login.php">Login</a></button>';
+                        echo '<button type="button" class="btn btn-warning"><a href="../backend/signup.php">Sign-up</a></button>';
+                    }
+
+                    if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+                        // Redirect to login page or display an error message
+                        header('Location: ../backend/index.php');
+                        exit();
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!--End of nav bar-->
+    <div class="container-body">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <h1>Admin Panel</h1>
+
+                    <!-- Rooms Table -->
+                    <h2>Rooms</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Room ID</th>
+                                    <th>Room Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($rooms as $room) : ?>
+                                <tr>
+                                    <td><?= $room['id']; ?></td>
+                                    <td><?= $room['room_type']; ?></td>
+                                    <td><?= $room['status']; ?></td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm edit-btn"
+                                            data-toggle="modal" data-target="#editModal"
+                                            data-room-id="<?= $room['id']; ?>">Edit</button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Booked Rooms Table -->
+                    <h2>Booked Rooms</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Room</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($bookedRooms as $bookedRoom) : ?>
+                                <tr>
+                                    <td><?= isset($bookedRoom['user']) ? $bookedRoom['user'] : 'N/A'; ?></td>
+                                    <td><?= isset($bookedRoom['room']) ? $bookedRoom['room'] : 'N/A'; ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Room Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="form-group">
+                            <label for="editRoomID">Room ID</label>
+                            <input type="text" class="form-control" id="editRoomID" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRoomStatus">Room Status</label>
+                            <select class="form-control" id="editRoomStatus">
+                                <option value="Available">Available</option>
+                                <option value="Booked">Booked</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="p-3 text-center text-white bg-dark fixed-bottom">
+        <p>&copy; 2023 Your Company. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script>
+    // Edit button click event handler
+    $('.edit-btn').click(function() {
+        var roomId = $(this).data('room-id');
+        var roomStatus = $(this).closest('tr').find('td:nth-child(3)').text();
+
+        $('#editRoomID').val(roomId);
+        $('#editRoomStatus').val(roomStatus);
+    });
+
+    // Save changes button click event handler
+    $('#saveChangesBtn').click(function() {
+        var roomId = $('#editRoomID').val();
+        var roomStatus = $('#editRoomStatus').val();
+
+        // Update the room status in the table
+        $('tr').find('td:contains("' + roomId + '")').siblings('td:nth-child(3)').text(roomStatus);
+
+        $('#editModal').modal('hide');
+    });
+    </script>
+</body>
+
+</html>
